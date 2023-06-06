@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Text, View, Button, Image, StyleSheet, TouchableHighlight, TouchableOpacity, TextInput, Dimensions, Alert} from 'react-native';
+import { Text, View, ScrollView, Image, StyleSheet, TouchableHighlight, TouchableOpacity, TextInput, Dimensions, Alert} from 'react-native';
 
 import {
   NavigationContainer,
@@ -63,7 +63,36 @@ function Profile() {
       }
   ]), []);
 
+  const radioMaritals = useMemo(() => ([
+    {
+        id: '1', 
+        label: 'Single/Unmarried',
+        value: 'Single/Unmarried'
+    },
+    {
+        id: '2',
+        label: 'Married',
+        value: 'Married'
+    },
+    {
+        id: '3',
+        label: 'Widow/er',
+        value: 'Widow/er'
+    },
+    {
+        id: '4',
+        label: 'Legally Separated',
+        value: 'Legally Separated'
+    },
+    {
+        id: '5',
+        label: 'Annulled',
+        value: 'Annulled'
+    },
+]), []);
+
   const [selectedId, setSelectedId] = useState();
+  const [selectMarital, setSelectedMarital] = useState();
   const [applicationData, setApplicationData] = useState({});
 
 
@@ -88,70 +117,93 @@ function Profile() {
   };
 
   return (
-    <View>
-      <Text style={styles.profileHeader}>Personal Information</Text>
-      
-      <View style={styles.formGroup}>
-        <Text>Lastname (Apelyido):</Text>
-        <TextInput 
-          placeholder='ex. Juan Dela Cruz' 
-          style={styles.textInput}
-          value={applicationData.lname || ''}
-          onChangeText={text => handleInputChange('lname', text)}/>
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text>Firstname (Pangalan):</Text>
-        <TextInput 
-        placeholder='ex. Jose' 
-        style={styles.textInput} 
-        value={applicationData.fname || ''}
-        onChangeText={text => handleInputChange('fname', text)}/>
-      </View>
-
-      <View style={styles.formGroup}>
-        <Text>Middlename (Gitnang Pangalan):</Text>
-        <TextInput 
-          placeholder='ex. Santos' 
-          style={styles.textInput}
-          value={applicationData.mname || ''}
-          onChangeText={text => handleInputChange('mname', text)}/>
-      </View>
-
-      <View style={styles.rowContainer}>
-        <View style={styles.column}>
-          <Text>Age (Edad):</Text>
+    <ScrollView>
+      <View>
+        <Text style={styles.profileHeader}>Personal Information</Text>
+        
+        <View style={styles.formGroup}>
+          <Text>Last name (Apelyido):</Text>
           <TextInput 
-          placeholder='ex. 18' 
-          style={styles.age}
-          value={applicationData.age || ''}
-          onChangeText={text => handleInputChange('age', text)}/>
+            placeholder='ex. Juan Dela Cruz' 
+            style={styles.textInput}
+            value={applicationData.lname || ''}
+            onChangeText={text => handleInputChange('lname', text)}/>
         </View>
-      
-        <View style={styles.column}>
-          <Text style={{marginBottom: 10}}>Gender (Kasarian):</Text>
-          <RadioGroup 
-            radioButtons={radioButtons} 
-            onPress={setSelectedId}
-            selectedId={selectedId}
-            layout="row"
-            
-          />
+
+        <View style={styles.formGroup}>
+          <Text>First name (Pangalan):</Text>
+          <TextInput 
+          placeholder='ex. Jose' 
+          style={styles.textInput} 
+          value={applicationData.fname || ''}
+          onChangeText={text => handleInputChange('fname', text)}/>
         </View>
-      </View>
 
-      <View style={styles.formGroup}>
-        <Text>Birthday (Kaarawan):</Text>
-        <TextInput placeholder='ex. mm/dd/yyyy' style={styles.textInput}
-        value={applicationData.bday || ''}
-        onChangeText={text => handleInputChange('bday', text)}/>
-      </View>
+        <View style={styles.formGroup}>
+          <Text>Exntension name (Gitnang Pangalan):</Text>
+          <TextInput 
+            placeholder='ex. Santos' 
+            style={styles.textInput}
+            value={applicationData.mname || ''}
+            onChangeText={text => handleInputChange('mname', text)}/>
+        </View>
 
-      
-      <TouchableOpacity style={styles.formBtn} onPress={() => navigate('Contact Information', {applicationData})}>
-        <Text style={styles.whiteButton}>Next</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.formGroup}>
+          <Text>Middle name (Gitnang Pangalan):</Text>
+          <TextInput 
+            placeholder='ex. Santos' 
+            style={styles.textInput}
+            value={applicationData.mname || ''}
+            onChangeText={text => handleInputChange('mname', text)}/>
+        </View>
+
+        <View style={styles.formGroup}>
+          <Text>Birthday (Kaarawan):</Text>
+          <TextInput placeholder='ex. mm/dd/yyyy' style={styles.textInput}
+          value={applicationData.bday || ''}
+          onChangeText={text => handleInputChange('bday', text)}/>
+        </View>
+
+        <View style={styles.formGroup}>
+            <Text style={{marginBottom: 10}}>Marital Status (Kasarian):</Text>
+            <RadioGroup 
+              radioButtons={radioMaritals} 
+              onPress={setSelectedMarital}
+              selectedId={selectMarital}
+              layout="column"
+              
+            />
+        </View>
+
+        <View style={styles.rowContainer}>
+          <View style={styles.column}>
+            <Text>Age (Edad):</Text>
+            <TextInput 
+            placeholder='ex. 18' 
+            style={styles.age}
+            value={applicationData.age || ''}
+            onChangeText={text => handleInputChange('age', text)}/>
+          </View>
+        
+          <View style={styles.column}>
+            <Text style={{marginBottom: 10}}>Gender (Kasarian):</Text>
+            <RadioGroup 
+              radioButtons={radioButtons} 
+              onPress={setSelectedId}
+              selectedId={selectedId}
+              layout="row"
+              
+            />
+          </View>
+        </View>
+
+
+        
+        <TouchableOpacity style={styles.formBtn} onPress={() => navigate('Contact Information', {applicationData})}>
+          <Text style={styles.whiteButton}>Next</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 

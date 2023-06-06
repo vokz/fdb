@@ -17,7 +17,6 @@ export const supaBase_testConnection = async () => {
       throw new Error('Error fetching data from Supabase');
     }
 
-    // console.log('tbl_applications data:', tbl_applications); // Check the retrieved data
     return tbl_applications;
   } catch (error) {
     console.error('Error fetching data from Supabase:', error);
