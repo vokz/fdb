@@ -36,7 +36,7 @@ export const checkStatus = async ( contact ) => {
         .select("*")
 
         // Filters
-        .like('contact', contact)
+        .like('cellPhoneContact', contact)
 
 
     
@@ -58,21 +58,38 @@ export const submitApplication = async ( params ) => {
     const supabaseKey = env.API_KEY;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // console.log(params)
+
     try {
-        const { data, error } = await supabase
+      // Remove properties with null values from params
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(([_, value]) => value !== null)
+      );
+  
+      const { data, error } = await supabase
         .from('tbl_applications')
-        .insert(params)
-
-    
-        if (error) {
-          console.error('Error fetching data from Supabase:', error);
-          throw new Error('Error fetching data from Supabase');
-        }
-
-        console.log(params)
-    
-      } catch (error) {
-        console.error('Error fetching data from Supabase:', error);
-        throw error;
+        .insert(cleanParams);
+  
+      if (error) {
+        console.error('Error inserting data into Supabase:', error);
+        return;
       }
+
+      let { data: tbl_applications } = await supabase
+      .from('tbl_applications')
+      .select("tracking_number")
+
+      // Filters
+      .eq('cellPhoneContact', params.cellPhoneContact)
+      // console.log(tbl_applications[0].tracking_number)
+      let tn = {
+        tracking_number: tbl_applications[0].tracking_number
+      }
+      return tbl_applications[0].tracking_number;
+    } catch (error) {
+      console.error('Error inserting data into Supabase:', error);
+      throw error;
+    }
+    
+    
 }
